@@ -2195,7 +2195,7 @@ class Power(StochasticParameter):
         # result = np.float_power(samples, exponents)
         # TODO why was float32 type here replaced with complex number
         #      formulation?
-        result = np.power(samples.astype(np.complex), exponents).real
+        result = np.power(samples.astype(complex), exponents).real
         if result.dtype != samples_dtype:
             result = result.astype(samples_dtype)
 
@@ -3151,7 +3151,7 @@ class FrequencyNoise(StochasticParameter):
         treal = wn_r * scale
         timag = wn_a * scale
 
-        wn_freqs_mul = np.zeros(treal.shape, dtype=np.complex)
+        wn_freqs_mul = np.zeros(treal.shape, dtype=complex)
         wn_freqs_mul.real = treal
         wn_freqs_mul.imag = timag
 
