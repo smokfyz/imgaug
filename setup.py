@@ -1,7 +1,22 @@
 # pylint: disable=missing-module-docstring
 import re
 
-from pkg_resources import get_distribution, DistributionNotFound
+try:
+    # Prefer stdlib metadata to avoid depending on pkg_resources (setuptools) at build time.
+    from importlib.metadata import PackageNotFoundError, version as _version
+except ImportError:  # pragma: no cover
+    from pkg_resources import DistributionNotFound, get_distribution
+else:
+    class DistributionNotFound(PackageNotFoundError):
+        pass
+
+    def get_distribution(dist_name):
+        try:
+            _version(dist_name)
+        except PackageNotFoundError as e:
+            raise DistributionNotFound(dist_name) from e
+        return dist_name
+
 from setuptools import setup, find_packages
 
 long_description = """A library for image augmentation in machine learning experiments, particularly convolutional
